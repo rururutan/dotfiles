@@ -6,6 +6,9 @@
 ; SambaでPartationが壊れるのを防ぐ
 (setq-default backup-by-copying :remote)
 
+; リンクファイルを壊さないようにする
+(setf backup-by-copying t)
+
 ; モードライン変更
 (setq-default mode-line-format "[%i]--%*- %b (%M) [%k:%l] %P %f")
 

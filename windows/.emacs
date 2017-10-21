@@ -1,24 +1,34 @@
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(column-number-mode t)
- '(current-language-environment "Japanese")
- '(line-number-mode nil)
- '(scroll-bar-mode nil)
- '(show-paren-mode t)
- '(size-indication-mode t)
- '(tool-bar-mode nil))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+﻿;; Package
+(package-initialize)
+;(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
+(add-to-list 'package-archives
+             '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+;(package-refresh-contents)
 
-;; Startupメッセージ消去
+;; Customは別ファイル
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(when (file-exists-p custom-file)
+  (load custom-file))
+
+;; 表示設定
+(column-number-mode t)
+(scroll-bar-mode nil)
+(size-indication-mode t)
+(tool-bar-mode nil)
+
+;; ダークモード
+(set-frame-parameter nil 'background-mode 'dark)
+
+;; 透過色設定
+(add-to-list 'default-frame-alist '(alpha . (0.97 0.97)))
+
+;; 対応する括弧を光らせる
+(show-paren-mode t)
+
+;; startupメッセージ消去
 (setq inhibit-splash-screen t)
+;; scratchメッセージ消去
+(setq initial-scratch-message "")
 
 ;; GC頻度下げ対策
 (setq gc-cons-threshold (* gc-cons-threshold 10))
@@ -29,11 +39,13 @@
 ;; 画面スクロール時にカーソル表示位置を維持
 (setq scroll-preserve-screen-position t)
 
+;; ホイール設定
 (setq mouse-wheel-scroll-amount
-       '(3                              ; 通常
+       '(2                              ; 通常
         ((shift) . 1)                   ; Shift
-        ((control) . 40)                ; Ctrl
+        ((control) . 10)                ; Ctrl
         ))
+(setq mouse-wheel-progressive-speed nil)
 
 ;; Key-Binding
 (global-set-key [M-kanji] 'ignore)
@@ -43,11 +55,16 @@
 ;; "yes or no"を"y or n"にする
 (fset 'yes-or-no-p 'y-or-n-p)
 
+;; Beep鳴らさない
 (setq ring-bell-function 'ignore)
 
+;; 言語設定
+(set-language-environment "Japanese")
+(prefer-coding-system 'utf-8)
+(set-default 'buffer-file-coding-system 'utf-8-with-signature)
+
 ;; Line number
-(custom-set-variables
- '(global-linum-mode t))
+(global-linum-mode t)
 (setq linum-delay t)
 (defadvice linum-schedule (around my-linum-schedule () activate)
   (run-with-idle-timer 0.2 nil #'linum-update-current))
