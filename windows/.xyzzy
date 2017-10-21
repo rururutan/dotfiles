@@ -1,0 +1,106 @@
+; -*- lisp -*-
+
+; 文字コード
+(change-default-fileio-encoding *encoding-sjis*)
+
+; SambaでPartationが壊れるのを防ぐ
+(setq-default backup-by-copying :remote)
+
+; モードライン変更
+(setq-default mode-line-format "[%i]--%*- %b (%M) [%k:%l] %P %f")
+
+; インクリメンタルサーチ
+(load-library "isearch")
+
+; 文字列補完
+(require "dabbrev")
+(global-set-key #\M-/ 'dabbrev-expand)
+
+; 右クリックでClipBoardにコピー
+(defun mouse-right-press ()
+  (interactive)
+  (mouse-left-press)
+  (paste-from-clipboard))
+
+; C-z でアイコン化
+(require "wip/winapi")
+(c:define-dll-entry
+  winapi:BOOL ShowWindow (winapi:HWND c:int) "user32")
+(global-set-key #\C-z
+                #'(lambda ()
+                    (interactive)
+                    (ShowWindow (get-window-handle) 6)))
+
+
+;(change-default-eol-code *eol-lf*)
+;(save-excursion
+;  (set-buffer "*scratch*")
+;  (change-fileio-encoding *encoding-euc-jp*)
+;  (change-eol-code *eol-lf*))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; マウスボタン設定
+(global-set-key #\LBtnUp 'copy-selection-to-clipboard)
+(global-set-key #\MBtnUp 'mouse-right-press)
+(global-set-key #\RBtnUp 'mouse-menu-popup)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; キーバインド
+;(global-set-key #\M-v 'previous-page)
+(define-key filer-keymap #\M-v 'filer-backward-page)
+(global-set-key #\Home 'beginning-of-buffer)
+(global-set-key #\End 'end-of-buffer)
+(global-set-key #\C-\\ 'toggle-ime)
+(global-set-key #\M-% 'query-replace)
+(global-set-key '(#\C-c #\C-g) 'goto-line)
+(global-set-key #\C-/ 'undo)
+(global-set-key '(#\C-x #\u) 'undo)
+(global-set-key '(#\C-x #\C-w) 'emacs-write-file)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Lisp拡張
+
+; HTML+ Mode
+(export 'ed::html+-mode "ed")
+(autoload 'html+-mode "html+-mode" t)
+(pushnew '("\\.html?$" . html+-mode) *auto-mode-alist* :test 'equal)
+
+; Region-Reverse
+(load-library "rv-region")
+(setq *rv-region-stay-on* t)
+
+; Migemo
+(require 'migemo)
+(setq *migemo-dict-file* "c:/opt/bin/dict/migemo-dict")
+(migemo-toggle)
+(delete-hook '*kill-xyzzy-hook* 'editor::migemo-close)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; 各種モード
+
+; C Mode
+(setq *c-indent-tabs-mode* t)
+(setq c-indent-level 4)
+
+; C++ Mode
+(add-hook '*c++-mode-hook*
+	  '(lambda ()
+	    (setq c++-indent-level 4)
+	    (set-tab-columns 4 (selected-buffer))
+	    (setq *c++-indent-tabs-mode* t)))
+
+; XML Mode
+(require "xml/xml-mode")
+
+(defun map-all-to-half-width-region (start end)
+  "全角 -> 半角（すべて）"
+  (interactive "*r")
+  (ed::map-to-half-width-region start end :ascii t
+                            :greek t :cyrillic t))
+
+(defun map-all-to-full-width-hiragana-region (start end)
+  "半角 -> 全角（すべて「ｶﾅ -> ひらがな」）"
+  (interactive "*r")
+  (ed::map-to-full-width-region start end 
+				:hiragana t :katakana nil))
+
