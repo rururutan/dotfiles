@@ -3,18 +3,27 @@
 ;(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (add-to-list 'package-archives
              '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+(add-to-list 'package-archives
+             '("melpa" . "https://melpa.org/packages/") t)
+
 ;(package-refresh-contents)
 
-;; Customは別ファイル
+;; Customize/Packge情報は別ファイルに保存
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (when (file-exists-p custom-file)
   (load custom-file))
 
 ;; 表示設定
 (column-number-mode t)
-(scroll-bar-mode nil)
+(scroll-bar-mode -1)
 (size-indication-mode t)
-(tool-bar-mode nil)
+(tool-bar-mode -1)
+
+;; スペース、タブなどを可視化
+;(global-whitespace-mode 1)
+
+;; タブサイズ
+(setq default-tab-width 4)
 
 ;; ダークモード
 (set-frame-parameter nil 'background-mode 'dark)
@@ -58,6 +67,9 @@
 ;; Beep鳴らさない
 (setq ring-bell-function 'ignore)
 
+;; 終了時にオートセーブファイルを削除
+(setq delete-auto-save-files t)
+
 ;; 言語設定
 (set-language-environment "Japanese")
 (prefer-coding-system 'utf-8)
@@ -69,3 +81,17 @@
 (defadvice linum-schedule (around my-linum-schedule () activate)
   (run-with-idle-timer 0.2 nil #'linum-update-current))
 (setq linum-format "%5d ")
+
+;; 編集時再読み込み
+(global-auto-revert-mode 1)
+
+;; ファイル履歴
+(setq recentf-max-menu-items 10)
+(setq recentf-max-saved-items 20)
+(setq recentf-auto-cleanup 'never) 
+(recentf-mode 1)
+
+;; ファイル名補完
+(ido-mode 1)
+(ido-everywhere 1)
+(setq ido-enable-flex-matching t)
