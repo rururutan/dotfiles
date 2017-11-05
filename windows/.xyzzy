@@ -41,6 +41,9 @@
 ;  (change-fileio-encoding *encoding-euc-jp*)
 ;  (change-eol-code *eol-lf*))
 
+; Grep結果のカラー化
+(setq *grep-highlight-match* '(:bold t :foreground 1))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; マウスボタン設定
 (global-set-key #\LBtnUp 'copy-selection-to-clipboard)
