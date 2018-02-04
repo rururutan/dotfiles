@@ -35,6 +35,19 @@
                     (ShowWindow (get-window-handle) 6)))
 
 
+; C-wheelでフォントサイズ変更
+(c:define-dll-entry
+  winapi:SHORT GetKeyState(c:int) "user32")
+(defun mouse-wheel-scroll-controller (window n lines)
+  (interactive)
+  (cond
+   ; ctrl
+   ((> 0 (GetKeyState #x11))(decrease-text-font-size n))
+   ; normal
+   (t (scroll-window (* n lines)))
+   ))
+(setq mouse-wheel-handler #'mouse-wheel-scroll-controller)
+
 ;(change-default-eol-code *eol-lf*)
 ;(save-excursion
 ;  (set-buffer "*scratch*")

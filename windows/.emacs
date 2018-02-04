@@ -60,6 +60,8 @@
 (global-set-key [M-kanji] 'ignore)
 (global-set-key "\C-h" 'delete-backward-char)
 (global-set-key "\C-c\C-g" 'goto-line)
+(global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
+(global-set-key (kbd "<C-wheel-up>") 'text-scale-increase) 
 
 ;; "yes or no"を"y or n"にする
 (fset 'yes-or-no-p 'y-or-n-p)
