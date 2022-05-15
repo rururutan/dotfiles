@@ -108,6 +108,10 @@
 	    (set-tab-columns 4 (selected-buffer))
 	    (setq *c++-indent-tabs-mode* t)))
 
+; Python Mode
+(load-library "py-mode")
+(push '("\\.py$" . py-mode) *auto-mode-alist*)
+
 ; XML Mode
 (require "xml/xml-mode")
 
