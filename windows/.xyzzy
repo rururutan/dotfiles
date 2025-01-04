@@ -1,7 +1,8 @@
 ; -*- lisp -*-
 
 ; 文字コード
-(change-default-fileio-encoding *encoding-sjis*)
+(setq *default-fileio-encoding* *encoding-utf8n*)
+(setq *clipboard-char-encoding* *encoding-utf16*)
 
 ; SambaでPartationが壊れるのを防ぐ
 (setq-default backup-by-copying :remote)

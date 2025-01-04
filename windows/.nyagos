@@ -28,5 +28,6 @@ end
 
 nyagos.alias["emacs"]="c:/opt/emacs/bin/emacs.exe $*"
 nyagos.alias["ls"]="__ls__ -oFh $*"
+nyagos.alias["rg"]="rg -i $*"
 
 -- vim:set ft=lua: --
